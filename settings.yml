@@ -1,0 +1,8 @@
+merge:
+  staging: staging.ontohub.org
+  develop: develop.ontohub.org
+
+networks:
+  - 127.0.0.1/8
+  - 204.232.175.64/27
+  - 192.30.252.0/22
