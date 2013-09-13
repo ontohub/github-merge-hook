@@ -25,7 +25,7 @@ class GithubMergeHook < Sinatra::Base
     end
   end
 
-  def authorized(ip)
+  def authorized?(ip)
     ip = IPAddress.parse(ip)
     a  = false
 
@@ -36,14 +36,16 @@ class GithubMergeHook < Sinatra::Base
     a
   end
 
-# configure :production, :development do
-#   enable :logging
-# end
-
   @@config = Config.instance.load! 'settings.yml'
 
+  if @@config['log']
+    configure :production, :development do
+      enable :logging
+    end
+  end
+
   post '/' do
-    halt unless authorized(request.env['REMOTE_ADDR'])
+    halt unless authorized? request.env['REMOTE_ADDR']
 
     json = JSON.parse(params[:payload])
 

@@ -1,4 +1,5 @@
 merge:
+  staging: develop
   staging: staging.ontohub.org
   develop: develop.ontohub.org
 
@@ -8,3 +9,5 @@ networks:
   - 192.30.252.0/22
 
 ssh_key: ~/.ssh/identity
+
+#log: true
