@@ -1,8 +1,3 @@
-merge:
-  staging: develop
-  staging: staging.ontohub.org
-  develop: develop.ontohub.org
-
 networks:
   - 127.0.0.1/8
   - 204.232.175.64/27
@@ -10,4 +5,22 @@ networks:
 
 ssh_key: ~/.ssh/identity
 
-#log: true
+workdir: /dev/shm
+
+repo_url: git@github.com:ontohub/ontohub.git
+push_dummy: /dev/shm/push_dummy.git
+
+#log_requests: true
+
+merge:
+  staging: develop
+  staging: staging.ontohub.org
+  develop: develop.ontohub.org
+
+deploy:
+  staging.ontohub.org:
+    after_change_to: staging
+    host: staging.ontohub.org
+  develop.ontohub.org:
+    after_change_to: develop
+    host: develop.ontohub.org

@@ -3,19 +3,19 @@ class GithubMergeHook::Server < Sinatra::Base
   include GithubMergeHook
 
   def authorized?(ip)
+    return true if CONFIG['networks'].nil?
+
     ip = IPAddress.parse(ip)
     a  = false
 
-    @@config['networks'].each do |network|
+    CONFIG['networks'].each do |network|
       a ||= IPAddress.parse(network).include? ip
     end
 
     a
   end
 
-  @@config = Config.instance.load! 'settings.yml'
-
-  if @@config['log']
+  if CONFIG['log_requests']
     configure :production, :development do
       enable :logging
     end
@@ -32,9 +32,9 @@ class GithubMergeHook::Server < Sinatra::Base
       halt
     end
 
-    halt unless @@config['merge'].include? branch
+    halt unless CONFIG['merge'].include? branch
 
-    to = @@config['merge'][branch]
+    to = CONFIG['merge'][branch]
 
     Merge.new(branch, to).perform
   end
