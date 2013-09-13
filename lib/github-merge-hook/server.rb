@@ -1,29 +1,6 @@
-require 'ipaddress'
-require 'json'
-require 'sinatra/base'
-require 'singleton'
+class GithubMergeHook::Server < Sinatra::Base
 
-class GithubMergeHook < Sinatra::Base
-
-  class Merge < Struct.new(:from, :to)
-    def perform
-      fork do
-        p self
-      end
-    end
-  end
-
-  class Config < Hash
-    include Singleton
-    
-    def load!(path)
-      unless File.exists? path
-        path = File.join(File.dirname(__FILE__), path)
-      end
-
-      self.merge! YAML.load_file(path)
-    end
-  end
+  include GithubMergeHook
 
   def authorized?(ip)
     ip = IPAddress.parse(ip)
@@ -60,10 +37,6 @@ class GithubMergeHook < Sinatra::Base
     to = @@config['merge'][branch]
 
     Merge.new(branch, to).perform
-  end
-
-  if app_file == $0
-    run!
   end
 
 end
