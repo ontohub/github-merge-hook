@@ -1,3 +1,4 @@
+require 'ipaddress'
 require 'json'
 require 'sinatra/base'
 require 'singleton'
@@ -24,6 +25,17 @@ class GithubMergeHook < Sinatra::Base
     end
   end
 
+  def authorized(ip)
+    ip = IPAddress.parse(ip)
+    a  = false
+
+    @@config['networks'].each do |network|
+      a ||= IPAddress.parse(network).include? ip
+    end
+
+    a
+  end
+
 # configure :production, :development do
 #   enable :logging
 # end
@@ -31,6 +43,8 @@ class GithubMergeHook < Sinatra::Base
   @@config = Config.instance.load! 'settings.yml'
 
   post '/' do
+    halt unless authorized(request.env['REMOTE_ADDR'])
+
     json = JSON.parse(params[:payload])
 
     begin
@@ -42,8 +56,6 @@ class GithubMergeHook < Sinatra::Base
     halt unless @@config['merge'].include? branch
 
     to = @@config['merge'][branch]
-
-    #ip = IPAddress request.env['REMOTE_ADDR']
 
     Merge.new(branch, to).perform
   end
