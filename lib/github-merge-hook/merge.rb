@@ -38,7 +38,7 @@ class GithubMergeHook::Merge < Struct.new(:from, :to)
 
   def git_command(command, *args)
     @@keypath     ||= File.expand_path(CONFIG['ssh_key'])
-    @@ssh_wrapper ||= File.join(File.dirname(__FILE__), '..', '..', 'scripts', 'git_ssh.sh')
+    @@ssh_wrapper ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'scripts', 'git_ssh.sh'))
 
     cmd  = "KEY=\"#{@@keypath}\" "
     cmd += "GIT_SSH=\"#{@@ssh_wrapper}\" "
