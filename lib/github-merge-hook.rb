@@ -5,6 +5,7 @@ end
 # StdLib dependencies
 require 'digest/sha1'
 require 'json'
+require 'yaml'
 require 'singleton'
 
 # The library path
