@@ -2,11 +2,10 @@ module GithubMergeHook
   VERSION = '0.0.1'
 end
 
-# Project dependencies
+# StdLib dependencies
 require 'digest/sha1'
-require 'ipaddress'
 require 'json'
-require 'sinatra/base'
+require 'yaml'
 require 'singleton'
 
 # The library path
