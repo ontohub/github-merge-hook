@@ -16,4 +16,4 @@ require File.join(lib, 'config.rb')
 CONFIG = GithubMergeHook::Config.instance.load! 'settings.yml'
 
 # Require any other ruby file in library path
-Dir[File.join(lib, '*.rb')].each { |file| require file }
+Dir[File.join(lib, '*.rb')].sort.each { |file| require file }
