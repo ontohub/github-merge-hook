@@ -36,9 +36,12 @@ class GithubMergeHook::Server < Sinatra::Base
 
     to = CONFIG['merge'][branch]
 
-    host = CONFIG['deploy'][to]['host']
-
-    deployment = Deployment.new(to, branch, host)
+    deployment = begin
+      host = CONFIG['deploy'][to]['host']
+      Deployment.new(to, branch, host)
+    rescue NoMethodError
+      nil
+    end
 
     Merge.new(branch, to, deployment).perform
   end

@@ -30,7 +30,7 @@ class GithubMergeHook::Merge < Struct.new(:from, :to, :deployment)
         exit
       end
 
-      deployment.perform
+      deployment.perform if deployment
     end
   end
 
