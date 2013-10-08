@@ -1,26 +1,34 @@
+# Requests are allowed from these IP networks.
 networks:
   - 127.0.0.1/8
   - 204.232.175.64/27
   - 192.30.252.0/22
 
+# SSH key with rw access to the repo.
 ssh_key: ~/.ssh/identity
 
+# 'Temporary' directory for merging.
 workdir: /dev/shm
 
+# Repository source.
 repo_url: git@github.com:ontohub/ontohub.git
+
+# Git repo, the changes are pushed to for testing.
 push_dummy: /dev/shm/push_dummy.git
 
+# Log incoming HTTP requests with parameters.
 #log_requests: true
 
+# Merge
+#   staging into staging.ontohub.org and
+#   develop into develop.ontohub.org
 merge:
-  staging: develop
   staging: staging.ontohub.org
   develop: develop.ontohub.org
 
+# Deploy
+#   staging.ontohub.org after merging of staging and
+#   develop.ontohub.org after merging of develop
 deploy:
-  staging.ontohub.org:
-    after_change_to: staging
-    host: staging.ontohub.org
-  develop.ontohub.org:
-    after_change_to: develop
-    host: develop.ontohub.org
+  staging: staging.ontohub.org
+  develop: develop.ontohub.org

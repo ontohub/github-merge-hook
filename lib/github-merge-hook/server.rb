@@ -32,18 +32,13 @@ class GithubMergeHook::Server < Sinatra::Base
       halt
     end
 
-    halt unless CONFIG['merge'].include? branch
-
     to = CONFIG['merge'][branch]
+    halt unless to
 
-    deployment = begin
-      host = CONFIG['deploy'][to]['host']
-      Deployment.new(to, branch, host)
-    rescue NoMethodError
-      nil
-    end
+    deploy = CONFIG['deploy'][branch]
+    deploy = deploy ? Deployment.new(deploy, branch) : nil
 
-    Merge.new(branch, to, deployment).perform
+    Merge.new(branch, to, deploy).perform
   end
 
 end

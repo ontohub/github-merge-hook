@@ -13,8 +13,7 @@ module GithubMergeHook::Git
   end
 
   def git_command(command, *args)
-    @@keypath     ||= File.expand_path(CONFIG['ssh_key'])
-    @@ssh_wrapper ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'scripts', 'git_ssh.sh'))
+    set_paths
 
     cmd  = "KEY=\"#{@@keypath}\" "
     cmd += "GIT_SSH=\"#{@@ssh_wrapper}\" "
@@ -37,6 +36,14 @@ module GithubMergeHook::Git
   def reset(option, head = nil)
     option = "--#{option.to_s}"
     git_command :reset, option, head
+  end
+
+
+  protected
+
+  def set_paths
+    @@keypath     ||= File.expand_path(CONFIG['ssh_key'])
+    @@ssh_wrapper ||= File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'scripts', 'git_ssh.sh'))
   end
 
 end
